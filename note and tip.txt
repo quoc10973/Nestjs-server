@@ -1,0 +1,7 @@
+install module by cli : cd project
+npx nest g module user
+npx nest g service user
+npx nest g controller user
+
+TypeORM:
+ npm install --save @nestjs/typeorm typeorm mysql2
