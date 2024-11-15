@@ -5,3 +5,6 @@ npx nest g controller user
 
 TypeORM:
  npm install --save @nestjs/typeorm typeorm mysql2
+
+ install class validation:
+npm install class-validator

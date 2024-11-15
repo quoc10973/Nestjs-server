@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TestConnectionService } from './config/testConnection';
+import { User } from './user/user.entity';
 
 
 @Module({
@@ -15,7 +16,7 @@ import { TestConnectionService } from './config/testConnection';
       username: 'root',
       password: 'root',
       database: 'NestjsDemo',
-      entities: [],
+      entities: [User],
       synchronize: true,
     }),
     UserModule],
