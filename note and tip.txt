@@ -8,3 +8,4 @@ TypeORM:
 
  install class validation:
 npm install class-validator
+npm install class-transformer class-validator
