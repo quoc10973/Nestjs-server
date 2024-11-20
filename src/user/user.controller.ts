@@ -1,10 +1,11 @@
-import { BadRequestException, Body, Controller, Delete, Get, Param, Post, Put, Query, Req, ValidationPipe } from '@nestjs/common';
+import { BadRequestException, Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, Query, Req, UseInterceptors, ValidationPipe } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './user.entity';
-import { updateUserRequest } from './user.dto';
+import { updateUserRequest } from './userDTO/userUpdateRequest';
 
 
 @Controller('user') // giống @RequestMapping trong Spring boot
+@UseInterceptors(ClassSerializerInterceptor) // Serialize, giống @JsonIgnore trong Spring boot
 export class UserController {
     constructor(private userService: UserService) { }
 
@@ -19,6 +20,7 @@ export class UserController {
     }
 
     @Get('/getall')
+
     async getAllUser() {
         return await this.userService.getAllUser();
     }
