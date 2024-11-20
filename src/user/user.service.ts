@@ -3,6 +3,7 @@ import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToInstance } from 'class-transformer';
+import { updateUserRequest } from './userDTO/userUpdateRequest';
 
 @Injectable()
 export class UserService {
@@ -22,6 +23,7 @@ export class UserService {
 
     async getAllUser() {
         try {
+            console.log("second");
             const users = await this.userRepository.find();
             return users;
         } catch (err) {
@@ -47,7 +49,7 @@ export class UserService {
 
     }
 
-    async updateById(id: string, requestBody: any) {
+    async updateById(id: string, requestBody: updateUserRequest) {
         let user = await this.userRepository.findOneBy({ id });
         if (!user) {
             throw new NotFoundException('User not found');

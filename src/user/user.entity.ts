@@ -14,7 +14,7 @@ export class User {
 
     @Column()
     @Length(6, 20, { message: 'Password must be between 6 and 20 characters' })
-    @Exclude()
+    @Exclude() // bỏ qua trường này khi trả về response
     password: string;
 
     @Column()
