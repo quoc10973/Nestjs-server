@@ -23,6 +23,7 @@ export class UserService {
 
     async getAllUser() {
         try {
+            console.log("second");
             const users = await this.userRepository.find();
             return users;
         } catch (err) {
