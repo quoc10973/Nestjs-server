@@ -1,3 +1,4 @@
+import { Exclude } from "class-transformer";
 import { IsEmail, IsOptional, Length } from "class-validator";
 import { Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
 
@@ -13,6 +14,7 @@ export class User {
 
     @Column()
     @Length(6, 20, { message: 'Password must be between 6 and 20 characters' })
+    @Exclude()
     password: string;
 
     @Column()
@@ -20,5 +22,5 @@ export class User {
 
     @Column({ nullable: true })
     @IsOptional()
-    age: number;
+    age: number
 }
