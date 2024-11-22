@@ -12,3 +12,5 @@ npm install class-transformer class-validator
 
 middleware luôn luôn chạy trước, sau đó tới guard và interceptor
 middleware -> guard -> interceptor -> response
+
+npm i --save @nestjs/config: cài môi trường config và cấu hình env
