@@ -4,10 +4,11 @@ import { UserController } from './user.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { LoggerMiddleware } from 'src/middleware/logging.middleware';
+import { AuthService } from 'src/authenticate/auth.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User])], // import User Entity vào module de sử dụng
-  providers: [UserService],
+  providers: [UserService, AuthService],
   controllers: [UserController]
 })
 export class UserModule implements NestModule {

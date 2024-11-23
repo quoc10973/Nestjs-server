@@ -65,4 +65,9 @@ export class UserController {
     async deleteUserById(@Param('id') id: string) {
         return await this.userService.deleteById(id);
     }
+
+    @Post('/register')
+    async register(@Body(new ValidationPipe()) registerRequest: User) {
+        return await this.userService.register(registerRequest);
+    }
 }

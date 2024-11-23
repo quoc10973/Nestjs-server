@@ -4,6 +4,9 @@ import { User } from './user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToInstance } from 'class-transformer';
 import { updateUserRequest } from './userDTO/userUpdateRequest';
+import { userResponse } from './userDTO/userResponse';
+import * as bcrypt from 'bcrypt';
+
 
 @Injectable()
 export class UserService {
@@ -78,6 +81,21 @@ export class UserService {
         } catch (err) {
             throw new InternalServerErrorException(`Failed to delete user: ${err.message}`);
         }
+    }
+
+    async register(registerRequest: User) {
+        let user = await this.userRepository.findOne(
+            { where: { email: registerRequest.email } }
+        );
+        if (user) {
+            throw new BadRequestException('Email already exists');
+        }
+        const saltOrRounds = 10;
+        const hashPassword = await bcrypt.hash(registerRequest.password, saltOrRounds);
+        registerRequest.password = hashPassword;
+        const registerdUser = await this.createUser(registerRequest);
+        let userResponse: userResponse = { email: registerdUser.email, firstName: registerdUser.firstName, lastName: registerdUser.lastName, phone: registerdUser.phone, age: registerdUser.age };
+        return userResponse;
     }
 
 }
