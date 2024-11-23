@@ -1,6 +1,11 @@
 import { Exclude } from "class-transformer";
-import { IsEmail, IsOptional, Length } from "class-validator";
+import { IsEmail, IsOptional, IsPhoneNumber, Length } from "class-validator";
 import { Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
+enum ROLE {
+    ADMIN = 'ADMIN',
+    MOD = 'MOD',
+    USER = 'USER'
+}
 
 @Entity()
 @Unique(["email"])
@@ -13,14 +18,26 @@ export class User {
     email: string;
 
     @Column()
-    @Length(6, 20, { message: 'Password must be between 6 and 20 characters' })
-    @Exclude() // bỏ qua trường này khi trả về response
-    password: string;
+    firstName: string;
 
     @Column()
-    name: string;
+    lastName: string;
+
+    @Column({ type: 'enum', enum: ROLE, default: ROLE.USER })
+    @Exclude()
+    role: ROLE;
+
+    @Column()
+    @Length(6, 20, { message: 'Password must be between 6 and 20 characters' })
+    password: string;
 
     @Column({ nullable: true })
     @IsOptional()
     age: number
+
+    @Column()
+    @IsPhoneNumber('VN')
+    phone: string;
+
+
 }

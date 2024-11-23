@@ -1,8 +1,9 @@
 import { IsEmail, IsNotEmpty } from "class-validator";
 
-export class updateUserRequest {
-    id: string;
+export class userResponse {
     email: string;
-    name: string;
+    firstName: string;
+    lastName: string;
+    phone: string;
     age: number;
 }

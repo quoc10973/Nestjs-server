@@ -4,13 +4,15 @@ import { User } from './user.entity';
 import { updateUserRequest } from './userDTO/userUpdateRequest';
 import { LoggingInterceptor } from 'src/interceptor/logging.interceptor';
 import { AuthGuard } from 'src/guard/auth.guard';
+import { loginRequest } from './userDTO/loginRequest';
+import { AuthService } from 'src/user/authenticate/auth.service';
 
 
 @Controller('user') // giống @RequestMapping trong Spring boot
 @UseInterceptors(ClassSerializerInterceptor) // Serialize, giống @JsonIgnore trong Spring boot
 
 export class UserController {
-    constructor(private userService: UserService) { }
+    constructor(private userService: UserService, private authenticateService: AuthService) { }
 
     @Get() // http://localhost:3000/user
     getUser() {
@@ -65,4 +67,15 @@ export class UserController {
     async deleteUserById(@Param('id') id: string) {
         return await this.userService.deleteById(id);
     }
+
+    @Post('/register')
+    async register(@Body(new ValidationPipe()) registerRequest: User) {
+        return await this.authenticateService.register(registerRequest);
+    }
+
+    @Post('/login')
+    async login(@Body(new ValidationPipe()) loginRequest: loginRequest) {
+        return await this.authenticateService.login(loginRequest);
+    }
 }
+

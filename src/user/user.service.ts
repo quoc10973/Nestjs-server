@@ -4,6 +4,9 @@ import { User } from './user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToInstance } from 'class-transformer';
 import { updateUserRequest } from './userDTO/userUpdateRequest';
+import { userResponse } from './userDTO/userResponse';
+import * as bcrypt from 'bcrypt';
+import { loginRequest } from './userDTO/loginRequest';
 
 @Injectable()
 export class UserService {
@@ -33,18 +36,14 @@ export class UserService {
 
     async getUserById(id: string) {
         const user = await this.userRepository.findOneBy({ id });
-        if (!user) {
-            throw new BadRequestException('User not found');
-        }
         return user;
 
     }
 
     async getUserByEmail(email: string) {
-        const user = await this.userRepository.findOne({ where: { email } });
-        if (!user) {
-            throw new BadRequestException('User not found');
-        }
+        const user = await this.userRepository.findOne(
+            { where: { email: email } }
+        );
         return user;
 
     }
@@ -79,5 +78,6 @@ export class UserService {
             throw new InternalServerErrorException(`Failed to delete user: ${err.message}`);
         }
     }
+
 
 }

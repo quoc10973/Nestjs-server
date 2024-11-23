@@ -14,3 +14,7 @@ middleware luôn luôn chạy trước, sau đó tới guard và interceptor
 middleware -> guard -> interceptor -> response
 
 npm i --save @nestjs/config: cài môi trường config và cấu hình env
+thêm entity vào app module: entities: [User],
+hash password
+npm i bcrypt
+npm i -D @types/bcrypt
