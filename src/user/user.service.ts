@@ -6,7 +6,7 @@ import { plainToInstance } from 'class-transformer';
 import { updateUserRequest } from './userDTO/userUpdateRequest';
 import { userResponse } from './userDTO/userResponse';
 import * as bcrypt from 'bcrypt';
-
+import { loginRequest } from './userDTO/loginRequest';
 
 @Injectable()
 export class UserService {
@@ -36,18 +36,14 @@ export class UserService {
 
     async getUserById(id: string) {
         const user = await this.userRepository.findOneBy({ id });
-        if (!user) {
-            throw new BadRequestException('User not found');
-        }
         return user;
 
     }
 
     async getUserByEmail(email: string) {
-        const user = await this.userRepository.findOne({ where: { email } });
-        if (!user) {
-            throw new BadRequestException('User not found');
-        }
+        const user = await this.userRepository.findOne(
+            { where: { email: email } }
+        );
         return user;
 
     }
@@ -83,19 +79,5 @@ export class UserService {
         }
     }
 
-    async register(registerRequest: User) {
-        let user = await this.userRepository.findOne(
-            { where: { email: registerRequest.email } }
-        );
-        if (user) {
-            throw new BadRequestException('Email already exists');
-        }
-        const saltOrRounds = 10;
-        const hashPassword = await bcrypt.hash(registerRequest.password, saltOrRounds);
-        registerRequest.password = hashPassword;
-        const registerdUser = await this.createUser(registerRequest);
-        let userResponse: userResponse = { email: registerdUser.email, firstName: registerdUser.firstName, lastName: registerdUser.lastName, phone: registerdUser.phone, age: registerdUser.age };
-        return userResponse;
-    }
 
 }

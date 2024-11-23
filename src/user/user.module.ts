@@ -4,10 +4,18 @@ import { UserController } from './user.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { LoggerMiddleware } from 'src/middleware/logging.middleware';
-import { AuthService } from 'src/authenticate/auth.service';
+import { AuthService } from 'src/user/authenticate/auth.service';
+import { JwtModule } from '@nestjs/jwt';
+require('dotenv').config();
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User])], // import User Entity vào module de sử dụng
+  imports: [TypeOrmModule.forFeature([User]),
+  JwtModule.register({
+    global: true,
+    secret: process.env.JWT_SECRET,
+    signOptions: { expiresIn: '1d' },
+  }),
+  ], // import User Entity vào module de sử dụng, 
   providers: [UserService, AuthService],
   controllers: [UserController]
 })
