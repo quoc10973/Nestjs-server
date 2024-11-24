@@ -29,6 +29,7 @@ export class AuthService {
             throw new BadRequestException('Invalid email or password');
         }
         let userResponse: userResponse = {
+            id: user.id,
             email: user.email,
             firstName: user.firstName,
             lastName: user.lastName,
@@ -56,7 +57,7 @@ export class AuthService {
         const hashPassword = await bcrypt.hash(registerRequest.password, saltOrRounds);
         registerRequest.password = hashPassword;
         const registerdUser = await this.userService.createUser(registerRequest);
-        let userResponse: userResponse = { email: registerdUser.email, firstName: registerdUser.firstName, lastName: registerdUser.lastName, phone: registerdUser.phone, age: registerdUser.age };
+        let userResponse: userResponse = { id: user.id, email: registerdUser.email, firstName: registerdUser.firstName, lastName: registerdUser.lastName, phone: registerdUser.phone, age: registerdUser.age };
         return userResponse;
     }
 
@@ -67,6 +68,7 @@ export class AuthService {
             email: user.email,
             firstName: user.firstName,
             lastName: user.lastName,
+            userRole: user.role
         };
         return this.jwtService.sign(payload);
     }

@@ -5,8 +5,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { plainToInstance } from 'class-transformer';
 import { updateUserRequest } from './userDTO/userUpdateRequest';
 import { userResponse } from './userDTO/userResponse';
-import * as bcrypt from 'bcrypt';
-import { loginRequest } from './userDTO/loginRequest';
 
 @Injectable()
 export class UserService {
@@ -27,8 +25,9 @@ export class UserService {
     async getAllUser() {
         try {
             console.log("second");
-            const users = await this.userRepository.find();
-            return users;
+            let users = await this.userRepository.find();
+            return users.map(user => plainToInstance(userResponse, user, { excludeExtraneousValues: true }));
+            //{ excludeExtraneousValues: true } bỏ qua các trường không cần thiết (không được đánh dấu @Expose)
         } catch (err) {
             throw new Error("Failed to get users: " + err.message);
         }
