@@ -1,6 +1,6 @@
 import { Exclude } from "class-transformer";
 import { IsEmail, IsOptional, IsPhoneNumber, Length } from "class-validator";
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, Timestamp, Unique } from "typeorm";
 enum ROLE {
     ADMIN = 'ADMIN',
     MOD = 'MOD',
@@ -39,5 +39,9 @@ export class User {
     @IsPhoneNumber('VN')
     phone: string;
 
+    @Column({ type: 'text' })
+    refreshToken: string;
 
+    @Column({ type: 'timestamp', nullable: true })
+    expireIn: Date;
 }
