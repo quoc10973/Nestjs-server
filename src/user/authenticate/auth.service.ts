@@ -7,6 +7,7 @@ import { userResponse } from "src/user/userDTO/userResponse";
 import { loginRequest } from "../userDTO/loginRequest";
 import { In, Repository, Timestamp } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
+require('dotenv').config();
 
 
 @Injectable()
@@ -35,7 +36,7 @@ export class AuthService {
             age: user.age
         };
         const accessToken: string = await this.generateToken(user);
-        const refreshToken: string = await this.generateToken(user);
+        const refreshToken: string = await this.generateRefreshToken(user);
         user.refreshToken = refreshToken;
         const expireIn = new Date();
         expireIn.setDate(expireIn.getDate() + 7);
@@ -70,6 +71,32 @@ export class AuthService {
         return this.jwtService.sign(payload);
     }
 
+    generateRefreshToken(user: any): string {
+        return this.jwtService.sign({ id: user.id, email: user.email }, {
+            secret: process.env.REFRESH_TOKEN_SECRET,
+            expiresIn: process.env.REFRESH_TOKEN_EXPIRATION,
+        });
+    }
+
+    async refreshToken(refreshToken: string) {
+        let user = await this.userRepository.findOne({ where: { refreshToken: refreshToken } });
+        if (!user) {
+            throw new BadRequestException('Invalid refresh token');
+        }
+        if (user.expireIn < new Date()) {
+            throw new BadRequestException('Refresh token expired');
+        }
+        const accessToken: string = await this.generateToken(user);
+        const newRefreshToken: string = await this.generateRefreshToken(user);
+        user.refreshToken = newRefreshToken;
+        const expireIn = new Date();
+        expireIn.setDate(expireIn.getDate() + 7);
+        user.expireIn = expireIn;
+        await this.userRepository.save(user);
+        const response: any = { accessToken: accessToken, refreshToken: newRefreshToken };
+        return response;
+
+    }
 
 
 }
