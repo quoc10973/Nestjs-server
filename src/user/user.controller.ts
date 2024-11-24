@@ -77,5 +77,10 @@ export class UserController {
     async login(@Body(new ValidationPipe()) loginRequest: loginRequest) {
         return await this.authenticateService.login(loginRequest);
     }
+
+    @Post('/refresh-token')
+    async refreshToken(@Body('refreshToken') refreshToken: string) {
+        return await this.authenticateService.refreshToken(refreshToken);
+    }
 }
 
