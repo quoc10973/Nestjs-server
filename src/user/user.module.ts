@@ -3,9 +3,10 @@ import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user.entity';
-import { LoggerMiddleware } from 'src/middleware/logging.middleware';
 import { AuthService } from 'src/user/authenticate/auth.service';
 import { JwtModule } from '@nestjs/jwt';
+import { LimitLoginAttemptsMiddleware } from 'src/middleware/limit-login-attempts.middleware';
+import { LoggerMiddleware } from 'src/middleware/logging.middleware';
 require('dotenv').config();
 
 @Module({
@@ -24,6 +25,8 @@ export class UserModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(LoggerMiddleware)
-      .forRoutes('*');
+      .forRoutes('*')
+      .apply(LimitLoginAttemptsMiddleware)
+      .forRoutes('user/login');
   }
 }
