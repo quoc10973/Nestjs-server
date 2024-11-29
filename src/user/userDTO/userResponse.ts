@@ -15,8 +15,13 @@ export class userResponse {
     lastName: string;
 
     @Expose()
+    role: string;
+
+    @Expose()
     phone: string;
 
     @Expose()
     age: number;
+
+
 }

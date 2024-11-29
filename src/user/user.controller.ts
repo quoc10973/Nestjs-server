@@ -1,4 +1,4 @@
-import { BadRequestException, Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, Query, Req, UseGuards, UseInterceptors, ValidationPipe } from '@nestjs/common';
+import { BadRequestException, Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, Query, Req, Request, UseGuards, UseInterceptors, ValidationPipe } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './user.entity';
 import { updateUserRequest } from './userDTO/userUpdateRequest';
@@ -6,6 +6,8 @@ import { LoggingInterceptor } from 'src/interceptor/logging.interceptor';
 import { AuthGuard } from 'src/guard/auth.guard';
 import { loginRequest } from './userDTO/loginRequest';
 import { AuthService } from 'src/user/authenticate/auth.service';
+import { CurrentUser } from './decorators/currentUser.decorator';
+import { userResponse } from './userDTO/userResponse';
 
 
 @Controller('user') // giống @RequestMapping trong Spring boot
@@ -82,5 +84,13 @@ export class UserController {
     async refreshToken(@Body('refreshToken') refreshToken: string) {
         return await this.authenticateService.refreshToken(refreshToken);
     }
+
+    @Get('/current-user')
+    @UseGuards(AuthGuard)
+    //@CurrentUser() -> là 1 request chứa thông tin user hiện tại đang login
+    async getCurrentUser(@CurrentUser() currentUser: User) {
+        return currentUser;
+    }
+
 }
 
