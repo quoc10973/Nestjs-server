@@ -18,3 +18,6 @@ thêm entity vào app module: entities: [User],
 hash password
 npm i bcrypt
 npm i -D @types/bcrypt
+
+giới hạn số lần đăng nhập thất bại
+npm install express-rate-limit
