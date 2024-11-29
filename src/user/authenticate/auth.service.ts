@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable, Req, Request } from "@nestjs/common";
 import { User } from "src/user/user.entity";
 import { UserService } from "src/user/user.service";
 import { JwtService } from '@nestjs/jwt';
@@ -33,6 +33,7 @@ export class AuthService {
             email: user.email,
             firstName: user.firstName,
             lastName: user.lastName,
+            role: user.role,
             phone: user.phone,
             age: user.age
         };
@@ -57,7 +58,15 @@ export class AuthService {
         const hashPassword = await bcrypt.hash(registerRequest.password, saltOrRounds);
         registerRequest.password = hashPassword;
         const registerdUser = await this.userService.createUser(registerRequest);
-        let userResponse: userResponse = { id: user.id, email: registerdUser.email, firstName: registerdUser.firstName, lastName: registerdUser.lastName, phone: registerdUser.phone, age: registerdUser.age };
+        let userResponse: userResponse = {
+            id: user.id,
+            email: registerdUser.email,
+            firstName: registerdUser.firstName,
+            lastName: registerdUser.lastName,
+            role: registerdUser.role,
+            phone: registerdUser.phone,
+            age: registerdUser.age
+        };
         return userResponse;
     }
 
@@ -99,6 +108,5 @@ export class AuthService {
         return response;
 
     }
-
 
 }
