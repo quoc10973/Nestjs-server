@@ -6,6 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TestConnectionService } from './config/testConnection';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { User } from './user/user.entity';
+import { PostModule } from './post/post.module';
+import { Post } from './post/post.entity';
 require('dotenv').config();
 
 
@@ -25,13 +27,15 @@ require('dotenv').config();
         username: configService.get('DB_USER'),
         password: configService.get('DB_PASS'),
         database: configService.get('DB_NAME'),
-        entities: [User],
+        entities: [User, Post],
         synchronize: true,
       }),
       inject: [ConfigService],
     }),
 
-    UserModule],
+    UserModule,
+
+    PostModule],
   controllers: [AppController],
   providers: [AppService, TestConnectionService],
 })

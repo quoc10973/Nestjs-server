@@ -8,6 +8,7 @@ import { loginRequest } from './userDTO/loginRequest';
 import { AuthService } from 'src/user/authenticate/auth.service';
 import { CurrentUser } from './decorators/currentUser.decorator';
 import { userResponse } from './userDTO/userResponse';
+import { AuthorizationGuard } from 'src/guard/authorization.guard';
 
 
 @Controller('user') // giống @RequestMapping trong Spring boot
@@ -29,7 +30,7 @@ export class UserController {
 
     //middleware -> guard -> interceptor -> response
     @Get('/getall')
-    @UseGuards(AuthGuard) // 
+    @UseGuards(AuthGuard, new AuthorizationGuard(['USER', 'ADMIN'])) //truyền tham số vào guard để kiểm tra quyền, gộp nhiều guard lại thành 1 guard
     @UseInterceptors(new LoggingInterceptor())  // -> thực thi thao tác trước khi vào request, thực thi thao tác sau khi request xử lý xong
     async getAllUser() {
         return await this.userService.getAllUser();

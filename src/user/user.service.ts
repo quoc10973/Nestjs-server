@@ -24,7 +24,6 @@ export class UserService {
 
     async getAllUser() {
         try {
-            console.log("second");
             let users = await this.userRepository.find();
             return users.map(user => plainToInstance(userResponse, user, { excludeExtraneousValues: true }));
             //{ excludeExtraneousValues: true } bỏ qua các trường không cần thiết (không được đánh dấu @Expose)
