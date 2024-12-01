@@ -1,6 +1,7 @@
 import { Exclude } from "class-transformer";
 import { IsEmail, IsOptional, IsPhoneNumber, Length } from "class-validator";
-import { Column, Entity, PrimaryGeneratedColumn, Timestamp, Unique } from "typeorm";
+import { Post, } from "src/post/post.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Timestamp, Unique } from "typeorm";
 enum ROLE {
     ADMIN = 'ADMIN',
     MOD = 'MOD',
@@ -44,4 +45,7 @@ export class User {
 
     @Column({ type: 'timestamp', nullable: true })
     expireIn: Date;
+
+    @OneToMany(() => Post, post => post.user)
+    posts: Post[];
 }
