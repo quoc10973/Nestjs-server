@@ -2,7 +2,7 @@ import { BadRequestException, Injectable, Req, Request } from "@nestjs/common";
 import { User } from "src/user/user.entity";
 import { UserService } from "src/user/user.service";
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
+import * as bcryptjs from 'bcryptjs';
 import { userResponse } from "src/user/userDTO/userResponse";
 import { loginRequest } from "../userDTO/loginRequest";
 import { In, Repository, Timestamp } from "typeorm";
@@ -24,7 +24,7 @@ export class AuthService {
         if (!user) {
             throw new BadRequestException('Invalid email or password');
         }
-        const isMatch = await bcrypt.compare(loginRequest.password, user.password);
+        const isMatch = await bcryptjs.compare(loginRequest.password, user.password);
         if (!isMatch) {
             throw new BadRequestException('Invalid email or password');
         }
@@ -55,19 +55,10 @@ export class AuthService {
             throw new BadRequestException('Email already exists');
         }
         const saltOrRounds = 10;
-        const hashPassword = await bcrypt.hash(registerRequest.password, saltOrRounds);
+        const hashPassword = await bcryptjs.hash(registerRequest.password, saltOrRounds);
         registerRequest.password = hashPassword;
         const registerdUser = await this.userService.createUser(registerRequest);
-        let userResponse: userResponse = {
-            id: user.id,
-            email: registerdUser.email,
-            firstName: registerdUser.firstName,
-            lastName: registerdUser.lastName,
-            role: registerdUser.role,
-            phone: registerdUser.phone,
-            age: registerdUser.age
-        };
-        return userResponse;
+        return registerdUser;
     }
 
     async generateToken(user: User) {

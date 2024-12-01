@@ -40,7 +40,7 @@ export class User {
     @IsPhoneNumber('VN')
     phone: string;
 
-    @Column({ type: 'text' })
+    @Column({ type: 'text', nullable: true })
     refreshToken: string;
 
     @Column({ type: 'timestamp', nullable: true })
