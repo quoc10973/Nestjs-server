@@ -27,4 +27,4 @@ docker build
 docker build -t nestjs-backend .
 docker run -p 8080:8080 --name nestjs-server nestjs-backend
 
-host.docker.internal (host mysql chạy trond docker)
+host.docker.internal (host mysql chạy trong docker)
