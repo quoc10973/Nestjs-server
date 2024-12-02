@@ -15,9 +15,14 @@ middleware -> guard -> interceptor -> response
 
 npm i --save @nestjs/config: cài môi trường config và cấu hình env
 thêm entity vào app module: entities: [User],
+
 hash password
 npm i bcrypt
 npm i -D @types/bcrypt
 
 giới hạn số lần đăng nhập thất bại
 npm install express-rate-limit
+
+docker build
+docker build -t nestjs-backend .
+docker run -p 8080:8080 --name nestjs-server nestjs-backend
