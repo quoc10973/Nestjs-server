@@ -97,3 +97,12 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+
+## Infor about this project
+Blog project - user can post their content, admin can manage the posts. REST API with JWT (Access Token and Refresh Token), basic security to protect server.
+
+## Docker build
+I have created Dockerfile. To run this, cd to this project:
+```
+docker build -t nestjs-backend .
+docker run -p 8080:8080 --name nestjs-server nestjs-backend
