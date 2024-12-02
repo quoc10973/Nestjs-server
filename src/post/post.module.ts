@@ -7,7 +7,7 @@ import { UserService } from 'src/user/user.service';
 import { User } from 'src/user/user.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Post, User])], //tiêm User vì sài AuthGuard cần sử dụng User Repositoy
+  imports: [TypeOrmModule.forFeature([Post, User])], //tiêm User vì sài UserService cần sử dụng User Repositoy
   providers: [PostService, UserService], //tiêm UserService vì sài AuthGuard cần sử dụng UserService
   controllers: [PostController]
 })

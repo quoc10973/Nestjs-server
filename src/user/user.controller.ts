@@ -23,6 +23,7 @@ export class UserController {
     }
 
     @Post('/create') // http://localhost:3000/user/create
+    @UseGuards(AuthGuard, new AuthorizationGuard(['ADMIN']))
     async createUser(@Body(new ValidationPipe()) user: User) {
         return await this.userService.createUser(user);
     }
@@ -30,13 +31,14 @@ export class UserController {
 
     //middleware -> guard -> interceptor -> response
     @Get('/getall')
-    @UseGuards(AuthGuard, new AuthorizationGuard(['USER', 'ADMIN'])) //truyền tham số vào guard để kiểm tra quyền, gộp nhiều guard lại thành 1 guard
+    @UseGuards(AuthGuard, new AuthorizationGuard(['ADMIN'])) //truyền tham số vào guard để kiểm tra quyền, gộp nhiều guard lại thành 1 guard
     @UseInterceptors(new LoggingInterceptor())  // -> thực thi thao tác trước khi vào request, thực thi thao tác sau khi request xử lý xong
     async getAllUser() {
         return await this.userService.getAllUser();
     }
 
     @Get('/getbyid')
+    @UseGuards(AuthGuard, new AuthorizationGuard(['ADMIN']))
     async getUserById(@Query('id') id: string) {
         if (!id) {
             throw new BadRequestException('User ID is required');
@@ -45,6 +47,7 @@ export class UserController {
     }
 
     @Get('/getbyemail')
+    @UseGuards(AuthGuard, new AuthorizationGuard(['ADMIN']))
     async getUserByEmail(@Query('email') email: string) {
         if (!email) {
             throw new BadRequestException('Email is required');
@@ -53,6 +56,7 @@ export class UserController {
     }
 
     @Put('/update') //http://localhost:8080/user/update?id=XXX
+    @UseGuards(AuthGuard)
     async updateById(@Query('id') id: string, @Body(new ValidationPipe()) requestBody: updateUserRequest) {
         if (!id) {
             throw new BadRequestException('User ID is required');
@@ -62,11 +66,13 @@ export class UserController {
     }
 
     @Put('/:id') //http://localhost:8080/user/XXX
+    @UseGuards(AuthGuard)
     async updateById2(@Param('id') id: string, @Body(new ValidationPipe()) requestBody: updateUserRequest) {
         return await this.userService.updateById(id, requestBody);
     }
 
     @Delete('/:id') //http://localhost:8080/user/XXX
+    @UseGuards(AuthGuard, new AuthorizationGuard(['ADMIN']))
     async deleteUserById(@Param('id') id: string) {
         return await this.userService.deleteById(id);
     }
